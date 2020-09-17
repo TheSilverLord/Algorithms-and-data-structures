@@ -1,6 +1,6 @@
 #pragma once
 template <class T>
-class Array
+class List
 {
 private:
 	int size;
@@ -10,10 +10,10 @@ private:
 	int seenValCount;
 
 public:
-	Array();
-	Array(int capacity0);
-	~Array();
-	Array(const Array& array);
+	List();
+	List(int capacity0);
+	~List();
+	List(const List<T>& list);
 
 	int getSize();
 	void clear();
@@ -26,23 +26,33 @@ public:
 	bool add(int index, T value);
 	bool deleteValue(T value);
 	bool deleteIndexVal(int index);
-	friend class Iterator;
-	Iterator begin();
-	Iterator rbegin();
-	Iterator end();
-	Iterator rend();
 	int getSeenValCount();
 	void show();
 
 	class Iterator
 	{
 	private:
-		Array* p;
+		List* p;
 		int index;
 
 	public:
 		Iterator();
 	};
 
-	//дописать реверс-итератор
+	class reverse_Iterator
+	{
+	private:
+		List* p;
+		int index;
+
+	public:
+		reverse_Iterator();
+	};
+
+	friend class Iterator;
+	friend class reverse_Iterator;
+	Iterator begin();
+	reverse_Iterator rbegin();
+	Iterator end();
+	reverse_Iterator rend();
 };
