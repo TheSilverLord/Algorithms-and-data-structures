@@ -10,10 +10,7 @@ private:
 	int seenValCount=0;
 
 public:
-	
 	//List(const List<T>& list);
-
-
 
 	class Iterator
 	{
@@ -37,13 +34,10 @@ public:
 
 	friend class Iterator;
 	friend class reverse_Iterator;
-
-
 	Iterator begin();
 	reverse_Iterator rbegin();
 	Iterator end();
 	reverse_Iterator rend();
-
 
 
 
@@ -82,12 +76,10 @@ public:
 		capacity = capacity0;
 	}
 
-
 	bool isEmpty() {
 		if (size == 0) return true;
 		else return false;
 	}
-
 
 	bool contains(T value) {
 		for (int i = 0; i < size; i++) {
@@ -99,18 +91,19 @@ public:
 		return false;
 	}
 
-
 	T get(int index) {
-		if (index > size); //добавить исключение
+		if (index > size || index < 0) throw "Exception";
 		else return array[index];
 	}
 
-
-	void set(int index, T value) {
-		if (index > size);  //добавить исключение
-		else array[index] = value;
+	bool set(int index, T value) {
+		if (index > size || index < 0) return false;
+		else
+		{
+			array[index] = value;
+			return true;
+		}
 	}
-
 
 	int getIndex(T value) {
 		for (int i = 0; i < size; i++) 
@@ -118,7 +111,6 @@ public:
 
 		return -1;
 	}
-
 
 	void add(T value) {
 		array[size] = value;
@@ -134,17 +126,8 @@ public:
 		}
 	}
 
-	//void add(int index, T value) {
-	//	if (index > size)return false;
-	//	else {
-	//
-	//
-	//	}
-	//
-	//} If your read this pls send me some letter in VK
-
 	bool add(int index, T value) {
-		if (index > size)return false;
+		if (index > size || index < 0)return false;
 		else {
 			for (int i = size; i > index; i--) {
 				array[i] = array[i - 1];
@@ -192,7 +175,7 @@ public:
 	}
 
 	bool deleteIndexVal(int index) {
-		if (index > size) return false;
+		if (index > size || index < 0) return false;
 		else {
 			for (int i = index; i < size - 1; i++) {
 				array[i] = array[i + 1];
@@ -218,6 +201,4 @@ public:
 		return seenValCount;
 	}
 
-
-	
 };

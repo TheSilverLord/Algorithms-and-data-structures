@@ -19,39 +19,39 @@ int main() {
 
 		switch (k)
 		{
-		case 1: {
+		case 1: { // Добавить элемент в массив
 			int value;
-			std::cout << "Введите значение: ";
 			std::cin >> value;
 			list.add(value);
 			std::cout << std::endl;
 			break; }
-		case 2: {
+		case 2: { // Добавить элемент по номеру
 			int value,index;
-			std::cout << "Введите индекс и значение: ";
 			std::cin  >> index >> value;
 			std::cout << list.add(index,value);
 			std::cout << std::endl;
 			break; }
-		case 3: {
+		case 3: { // Размер массива
 			std::cout << list.getSize() << std::endl;
 			break; }
-		case 4: {
+		case 4: { // Удалить элемент
 			break; }
-		case 5: {
+		case 5: { // Удалить элемент по номеру
 			break; }
-		case 6: {
+		case 6: { // Очистить массив
 			break; }
-		case 7: {
+		case 7: { // Проверить на пустоту
 			break; }
-		case 8: {
+		case 8: { // Проверить, есть ли элемент в массиве
 			break; }
-		case 9: {
+		case 9: { // Изменить значение по номеру
 
 			break; }
-		case 10: {break; }
-		case 11: {break; }
-		case 12: {
+		case 10: { // Вывести значение по номеру
+			break; }
+		case 11: { // Вывести позицию заданного элемента
+			break; }
+		case 12: { // Вывести массив на экран
 			int size = list.getSize();
 			for (int i = 0; i < size; i++) {
 				std::cout << list.get(i) << " ";
@@ -59,7 +59,8 @@ int main() {
 			std::cout << std::endl;
 
 			break; }
-		case 13: {break; }
+		case 13: { // Число просмотренных элементов
+			break; }
 		case 14: {break; }
 		case 15: {break; }
 		default:
