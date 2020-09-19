@@ -64,7 +64,8 @@ public:
 
 
 
-	int getSize() { return size ;};
+	int getSize() { return size ;}
+	int getCapacity() { return capacity; }
 
 	void clear() {
 		T* copyArr = new T[capacity0];
@@ -82,6 +83,7 @@ public:
 	}
 
 	bool contains(T value) {
+		seenValCount = 0;
 		for (int i = 0; i < size; i++) {
 			seenValCount++;
 			if (array[i] == value) {
@@ -92,12 +94,12 @@ public:
 	}
 
 	T get(int index) {
-		if (index > size || index < 0) throw "Exception";
+		if (index >= size || index < 0) throw "Exception";
 		else return array[index];
 	}
 
 	bool set(int index, T value) {
-		if (index > size || index < 0) return false;
+		if (index >= size || index < 0) return false;
 		else
 		{
 			array[index] = value;
@@ -106,9 +108,11 @@ public:
 	}
 
 	int getIndex(T value) {
-		for (int i = 0; i < size; i++) 
+		seenValCount = 0;
+		for (int i = 0; i < size; i++) {
+			seenValCount++;
 			if (array[i] == value)return i;
-
+		}
 		return -1;
 	}
 
@@ -127,9 +131,11 @@ public:
 	}
 
 	bool add(int index, T value) {
+		seenValCount = 0;
 		if (index > size || index < 0)return false;
 		else {
 			for (int i = size; i > index; i--) {
+				seenValCount++;
 				array[i] = array[i - 1];
 			}
 			array[index] = value;
@@ -156,13 +162,15 @@ public:
 			}
 			if (isFind) {
 				if (i == size-1) break;
+				seenValCount = 0;
 				array[i] = array[i + 1];
+			
 			}
 		}
 
 		size--;
-		if (size == capacity / 2) {
-			capacity = size + capacity0;
+		if (size <= capacity / 2) {
+			capacity = capacity/2 + capacity0;
 			T* copyArr = new T[capacity];
 			for (int i = 0; i < size; i++) {
 				copyArr[i] = array[i];
@@ -175,15 +183,15 @@ public:
 	}
 
 	bool deleteIndexVal(int index) {
-		if (index > size || index < 0) return false;
+		if (index >= size || index < 0) return false;
 		else {
 			for (int i = index; i < size - 1; i++) {
 				array[i] = array[i + 1];
 			}
 
 			size--;
-			if (size == capacity / 2) {
-				capacity = size + capacity0;
+			if (size <= capacity / 2) {
+				capacity = capacity / 2 + capacity0;
 				T* copyArr = new T[capacity];
 				for (int i = 0; i < size; i++) {
 					copyArr[i] = array[i];

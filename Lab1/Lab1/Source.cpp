@@ -32,24 +32,43 @@ int main() {
 			std::cout << std::endl;
 			break; }
 		case 3: { // Размер массива
-			std::cout << list.getSize() << std::endl;
+			std::cout << list.getSize() << " " << list.getCapacity() << std::endl;
 			break; }
 		case 4: { // Удалить элемент
+			int value;
+			std::cin >> value;
+			std::cout << list.deleteValue(value) << std::endl;
 			break; }
 		case 5: { // Удалить элемент по номеру
+			int index;
+			std::cin >> index;
+			std::cout << list.deleteIndexVal(index) << std::endl;
 			break; }
 		case 6: { // Очистить массив
+			list.clear();
 			break; }
 		case 7: { // Проверить на пустоту
+			std::cout << list.isEmpty() << std::endl;
 			break; }
 		case 8: { // Проверить, есть ли элемент в массиве
+			int value;
+			std::cin >> value;
+			std::cout << list.contains(value) << std::endl;
 			break; }
 		case 9: { // Изменить значение по номеру
-
+			int value, index;
+			std::cin >> index >> value;
+			std::cout << list.set(index, value) << std::endl;
 			break; }
 		case 10: { // Вывести значение по номеру
+			int index;
+			std::cin >> index;
+			std::cout << list.get(index) << std::endl;
 			break; }
 		case 11: { // Вывести позицию заданного элемента
+			int value;
+			std::cin >> value;
+			std::cout << list.getIndex(value) << std::endl;
 			break; }
 		case 12: { // Вывести массив на экран
 			int size = list.getSize();
@@ -60,6 +79,7 @@ int main() {
 
 			break; }
 		case 13: { // Число просмотренных элементов
+			std::cout << list.getSeenValCount() << std::endl;
 			break; }
 		case 14: {break; }
 		case 15: {break; }
