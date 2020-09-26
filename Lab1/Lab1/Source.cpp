@@ -8,13 +8,16 @@ int main() {
 	setlocale(LC_ALL, "Rus");
 	List<int> list;
 	bool n = true;
+	List<int>::Iterator* it = NULL;
+	List<int>::reverse_Iterator* it1 = NULL;
 	while (n) {
 		int k;
 		std::cout << "\t\tMenu\n" << "1. Добавить элемент в массив\n" << "2. Добавить элемент по номеру\n"
 			<< "3. Размер массива\n" << "4.Удалить элемент\n" << "5. Удалить элемент по номеру\n"
 			<< "6.Очистить массив\n" << "7. Проверить на пустоту\n" << "8. Проверить, есть ли элемент в массиве\n"
 			<< "9. Изменить значение по номеру\n" << "10. Вывести значение по номеру\n" << "11. Вывести позицию заданного элемента\n"
-			<< "12. Вывести массив на экран\n" << "13. Число просмотренных элементов\n" << "14. ИТЕРАТОРЫ(ПОТОМ)\n";
+			<< "12. Вывести массив на экран\n" << "13. Число просмотренных элементов\n" << "14. Итератор: Операция *\n" << "15. Итератор: Операция ++\n"
+			<< "16. Итератор: Операция --\n" << "17. Риверс Итератор: Операция *\n" << "18. Риверс Итератор: Операция ++\n" << "19. Риверс Итератор: Операция --\n";;
 		std::cin >> k;
 
 		switch (k)
@@ -81,8 +84,49 @@ int main() {
 		case 13: { // Число просмотренных элементов
 			std::cout << list.getSeenValCount() << std::endl;
 			break; }
-		case 14: {break; }
-		case 15: {break; }
+		case 14: {
+			if (it == NULL) it = new List<int>::Iterator(&list);
+			std::cout << *(*it) << std::endl; break; }
+		case 15: {
+			if (it == NULL) it = new List<int>::Iterator(&list);
+			++(*it);
+			if (*it != *list.end());
+			else {
+				std::cout << "Error:" << std::endl;
+				--(*it);
+			}
+			break; }
+		case 16: {
+			if (it == NULL) it = new List<int>::Iterator(&list);
+			if (*it != *list.begin())
+				--(*it);
+			else {
+				std::cout << "Error:" << std::endl;
+				++(*it);
+			}
+			break; }
+		case 17: {
+			if (it1 == NULL) it1 = new List<int>::reverse_Iterator(&list);
+			std::cout << **it1 << std::endl; break; }
+		case 18: {
+			if (it1 == NULL) it1 = new List<int>::reverse_Iterator(&list);
+			++(*it1);
+			if (*it1 != *list.rend());
+			else {
+				std::cout << "Error:" << std::endl;
+				--(*it1);
+			}
+			break; }
+		case 19:{ 
+			if (it1 == NULL) it1 = new List<int>::reverse_Iterator(&list);
+			if (*it1 != *list.rbegin())
+				--(*it1);
+			   else {
+			std::cout << "Error:" << std::endl;
+			++(*it1);
+		}
+			   break;
+		}
 		default:
 			break;
 		}

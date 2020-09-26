@@ -10,16 +10,51 @@ private:
 	int seenValCount=0;
 
 public:
-	//List(const List<T>& list);
 
 	class Iterator
 	{
 	private:
 		List* p;
 		int index;
+		T* data;
 
 	public:
-		Iterator();
+		Iterator(List* list) {
+			p = list;
+			index = 0;
+
+		}
+		Iterator(T* data);
+		Iterator(List* list, int index) {
+			p = list;
+			this->index = index;
+		}
+
+		T operator *() {
+			data = p->array + index;
+			return *data;
+		}
+
+		Iterator& operator ++() {
+			this->index++;
+			return *this;
+		}
+
+		Iterator& operator --() {
+			this->index--;
+			return *this;
+
+		}
+
+		bool operator ==(const Iterator& it) {
+			if (this->index == it.index)return true;
+			else return false;
+		}
+
+		bool operator !=(const Iterator& it) {
+			if (this->index == it.index)return false;
+			else return true;
+		}
 	};
 
 	class reverse_Iterator
@@ -27,17 +62,66 @@ public:
 	private:
 		List* p;
 		int index;
+		T* data;
 
 	public:
-		reverse_Iterator();
+		reverse_Iterator(List* list) {
+			p = list;
+			index = p->size-1;
+
+		}
+		reverse_Iterator(T* data);
+		reverse_Iterator(List* list, int index) {
+			p = list;
+			this->index = index;
+		}
+
+		T operator *() {
+			data = p->array + index;
+			return *data;
+		}
+
+		reverse_Iterator& operator ++() {
+			this->index--;
+			return *this;
+		}
+
+		reverse_Iterator& operator --() {
+			this->index++;
+			return *this;
+
+		}
+
+		bool operator ==(const reverse_Iterator& it) {
+			if (this->index == it.index)return true;
+			else return false;
+		}
+
+		bool operator !=(const reverse_Iterator& it) {
+			if (this->index == it.index)return false;
+			else return true;
+		}
 	};
 
 	friend class Iterator;
 	friend class reverse_Iterator;
-	Iterator begin();
-	reverse_Iterator rbegin();
-	Iterator end();
-	reverse_Iterator rend();
+	Iterator* begin() {
+		Iterator* copy = new Iterator(this);
+		return copy;
+	}
+	reverse_Iterator* rbegin() {
+		reverse_Iterator* copy = new reverse_Iterator(this, size-1);
+		return copy;
+
+	}
+	Iterator* end() {
+		Iterator* copy = new Iterator(this,size);
+		return copy;
+	}
+	reverse_Iterator* rend() {
+		reverse_Iterator* copy = new reverse_Iterator(this, -1);
+		return copy; //????????????????
+	}
 
 
 
