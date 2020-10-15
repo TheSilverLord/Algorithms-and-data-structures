@@ -16,7 +16,6 @@ public:
 	private:
 		List* p;
 		int index;
-		T* data;
 
 	public:
 		Iterator(List* list) {
@@ -24,26 +23,35 @@ public:
 			index = 0;
 
 		}
-		Iterator(T* data);
 		Iterator(List* list, int index) {
 			p = list;
 			this->index = index;
 		}
 
-		T operator *() {
-			data = p->array + index;
-			return *data;
+		T& operator *() {
+			if (p != NULL && p->getSize() != 0 && index < p->getSize())
+			{
+				return *(p->array + index);
+			}
+			else throw "Exception";
 		}
 
 		Iterator& operator ++() {
-			this->index++;
-			return *this;
+			if (p != NULL && p->getSize() != 0)
+			{
+				this->index++;
+				return *this;
+			}
+			else throw "Exception";
 		}
 
 		Iterator& operator --() {
-			this->index--;
-			return *this;
-
+			if (p != NULL && p->getSize() != 0)
+			{
+				this->index--;
+				return *this;
+			}
+			else throw "Exception";
 		}
 
 		bool operator ==(const Iterator& it) {
@@ -62,7 +70,6 @@ public:
 	private:
 		List* p;
 		int index;
-		T* data;
 
 	public:
 		reverse_Iterator(List* list) {
@@ -70,25 +77,35 @@ public:
 			index = p->size-1;
 
 		}
-		reverse_Iterator(T* data);
 		reverse_Iterator(List* list, int index) {
 			p = list;
 			this->index = index;
 		}
 
-		T operator *() {
-			data = p->array + index;
-			return *data;
+		T& operator *() {
+			if (p != NULL && p->getSize() != 0 && index >= 0)
+			{
+				return *(p->array + index);
+			}
+			else throw "Exception";
 		}
 
 		reverse_Iterator& operator ++() {
-			this->index--;
-			return *this;
+			if (p != NULL && p->getSize() != 0)
+			{
+				this->index--;
+				return *this;
+			}
+			else throw "Exception";
 		}
 
 		reverse_Iterator& operator --() {
-			this->index++;
-			return *this;
+			if (p != NULL && p->getSize() != 0)
+			{
+				this->index++;
+				return *this;
+			}
+			else throw "Exception";
 
 		}
 
@@ -123,8 +140,6 @@ public:
 		return copy; //????????????????
 	}
 
-
-
 	List() {
 		capacity0 = capacity = 2;
 		size = 0;
@@ -141,9 +156,14 @@ public:
 	}
 
 	List(const List<T>& list) {
-
-
-
+		this->array = new T[list.capacity];
+		for (int i = 0; i < size; i++) {
+			this->array[i] = list.array[i];
+		}
+		this->capacity0 = list.capacity0;
+		this->capacity = list.capacity;
+		this->size = list.size;
+		this->seenValCount = list.seenValCount;
 	}
 
 
@@ -156,7 +176,6 @@ public:
 
 		delete[] array;
 		array = copyArr;
-		delete copyArr;
 		size = 0;
 		capacity = capacity0;
 	}
@@ -254,7 +273,7 @@ public:
 
 		size--;
 		if (size <= capacity / 2) {
-			capacity = capacity/2 + capacity0;
+			capacity = size + capacity0;
 			T* copyArr = new T[capacity];
 			for (int i = 0; i < size; i++) {
 				copyArr[i] = array[i];
@@ -275,7 +294,7 @@ public:
 
 			size--;
 			if (size <= capacity / 2) {
-				capacity = capacity / 2 + capacity0;
+				capacity = size + capacity0;
 				T* copyArr = new T[capacity];
 				for (int i = 0; i < size; i++) {
 					copyArr[i] = array[i];
