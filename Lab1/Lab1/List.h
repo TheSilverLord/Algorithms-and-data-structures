@@ -16,6 +16,10 @@ public:
 	private:
 		List* p;
 		int index;
+<<<<<<< Updated upstream
+=======
+		T data;
+>>>>>>> Stashed changes
 
 	public:
 		Iterator(List* list) {
@@ -29,6 +33,7 @@ public:
 		}
 
 		T& operator *() {
+<<<<<<< Updated upstream
 			if (p != NULL && p->getSize() != 0 && index < p->getSize())
 			{
 				return *(p->array + index);
@@ -52,6 +57,36 @@ public:
 				return *this;
 			}
 			else throw "Exception";
+=======
+			if (p != NULL) {
+				data = *(p->array + index);
+				return data;
+			}
+			else {
+				//исключение
+			}
+		}
+
+		Iterator& operator ++() {
+			if (p != NULL) {
+				this->index++;
+			return *this;
+			}
+			else {
+				//исключение
+			}
+		}
+
+		Iterator& operator --() {
+			if (p != NULL) {
+				this->index--;
+				return *this;
+
+			}
+			else {
+				//исключение
+			}
+>>>>>>> Stashed changes
 		}
 
 		bool operator ==(const Iterator& it) {
@@ -70,11 +105,15 @@ public:
 	private:
 		List* p;
 		int index;
+<<<<<<< Updated upstream
+=======
+		T data;
+>>>>>>> Stashed changes
 
 	public:
 		reverse_Iterator(List* list) {
 			p = list;
-			index = p->size-1;
+			index = p->size - 1;
 
 		}
 		reverse_Iterator(List* list, int index) {
@@ -83,6 +122,7 @@ public:
 		}
 
 		T& operator *() {
+<<<<<<< Updated upstream
 			if (p != NULL && p->getSize() != 0 && index >= 0)
 			{
 				return *(p->array + index);
@@ -97,16 +137,46 @@ public:
 				return *this;
 			}
 			else throw "Exception";
+=======
+			if (p != NULL) {
+				data = *(p->array + index);
+				return data;
+			}
+			else {
+				//исключение
+			}
 		}
 
+		reverse_Iterator& operator ++() {
+			if (p != NULL) {
+				this->index--;
+				return *this;
+			}
+			else {
+				//исключение
+			}
+>>>>>>> Stashed changes
+		}
+	
+
 		reverse_Iterator& operator --() {
+<<<<<<< Updated upstream
 			if (p != NULL && p->getSize() != 0)
 			{
 				this->index++;
 				return *this;
 			}
 			else throw "Exception";
+=======
+			if (p != NULL) {
+				this->index++;
+				return *this;
+>>>>>>> Stashed changes
 
+			}
+			else {
+				//исключение
+			}
 		}
 
 		bool operator ==(const reverse_Iterator& it) {
