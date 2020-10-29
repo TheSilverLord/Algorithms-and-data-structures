@@ -1,2 +1,7 @@
 ﻿  Source.cpp
+<<<<<<< Updated upstream
   Lab1.vcxproj -> C:\Users\msilv\Documents\Prog_texts\Algorithms and data structures\Lab1\Debug\Lab1.exe
+=======
+D:\Project_C++\Algoritm_And_Data_Structure\Algorithms-and-data-structures\Lab1\Lab1\List.h(41): warning C4715: List<int>::Iterator::operator*: значение возвращается не при всех путях выполнения
+  Lab1.vcxproj -> D:\Project_C++\Algoritm_And_Data_Structure\Algorithms-and-data-structures\Lab1\Debug\Lab1.exe
+>>>>>>> Stashed changes
