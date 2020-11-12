@@ -19,8 +19,6 @@ private:
 			this->left = NULL;
 			this->right = NULL;
 		}
-		
-
 	};
 
 	Node* root;
@@ -103,7 +101,21 @@ private:
 			else tmp = tmp->right;
 		}
 		if (tmp == NULL) return false;
-	
+
+		if (tmp->left != NULL && tmp->right != NULL)
+			if (rt == tmp) {
+				Node* y = tmp->right;
+				while (y->left != NULL) {
+					y = y->left;
+				}
+				y->left = tmp->left;
+
+				root = root->right;
+
+				size--;
+				delete tmp;
+				return true;
+			}
 	
 		//ƒалее непон€тно
 		Node* x;
@@ -130,7 +142,7 @@ private:
 					tmp = y;
 				} 
 		//Ќепон€тно закончилось
-			
+		
 		if (pred == NULL) root = x;
 		else {
 			if (tmp->key < pred->key)
@@ -138,7 +150,6 @@ private:
 			else 
 				pred->right = x;
 		}
-	//Ќе работает удаление корн€ если есть 2 предка) остальное вроде все работает
 		size--;
 		delete tmp;
 		return true;
@@ -180,6 +191,7 @@ private:
 	}
 
 public:
+	bool is_update = false;
 
 	friend Node;
 
@@ -197,6 +209,8 @@ public:
 	int getSize() { 
 		return size;
 	}
+
+	Node* getRoot() { return root; }
 
 	Data* keys() {
 		Data* keys = new Data[size];
@@ -225,6 +239,7 @@ public:
 	}
 
 	bool insert(Key k, Data data) {
+		is_update = true;
 		return doInsert(root, k, data);
 	}
 
@@ -236,6 +251,7 @@ public:
 	}
 
 	bool remove(Key key) {
+		is_update = true;
 		return Iterative_Delete(root, key);
 	}
 
@@ -247,49 +263,149 @@ public:
 
 	class Iterator {
 	private:
-		Node* tmp;
-	
+		Binary_tree* tmp;
+		Node** arr;
+		int id = 0;
+		void refresh(Node* qwe, int& i) {
+			if (qwe == NULL) return;
+			arr[i++] = qwe;
+			refresh(qwe->left, i);
+			refresh(qwe->right, i);
+		}
 	public:
+		//—делать работающее удаление из корн€
+		Iterator(Binary_tree* qwe) {
+			int new_i = 0;
+			tmp = qwe;
+			arr = new Node*[tmp->getSize()];
+			refresh(tmp->root, new_i);
+			tmp->is_update = false;
 
-		Iterator() {
-			tmp = root;
 		}
+		Iterator(Binary_tree* qwe, int i) {
+			int new_i = 0;
+			tmp = qwe;
+			arr = new Node*[tmp->getSize()];
+			refresh(tmp->root, new_i);
+			tmp->is_update = false;
+			id = i;
+		}
+
 		
-		
-		Data operator *() {
-
-			return tmp->data;
+		Data& operator *() {
+			if (id >=0 && id < tmp->getSize())
+				return arr[id]->data;
+			else throw "Exeption";
 		}
 
-		Iterator* operator ++() {// ƒописать переход на правую ветку
-			return tmp->left;
+		Iterator* operator ++() {
+			if (id > tmp->getSize()) throw "Exeption";
+			if (tmp->is_update) {
+				int new_i = 0;
+				delete[] arr;
+				arr = new Node*[tmp->getSize()];
+				refresh(tmp->root, new_i);
+				tmp->is_update = false;
+			}
+			id++;
+			return this;
 		}
 
-		Iterator& operator --() {
-
-
+		Iterator* operator --() {
+			if (id < 0)throw "Exeption";
+			if (tmp->is_update) {
+				int new_i = 0;
+				delete[] arr;
+				arr = new Node*[tmp->getSize()];
+				refresh(tmp->root, new_i);
+				tmp->is_update = false;
+			}
+			id--;
+			return this;
 		}
 
 		bool operator ==(const Iterator* it) {
-			if (&tmp == &(it->tmp))return true;
+			if (id == it->id) return true;
 			else return false;
 		}
 
 		bool operator !=(const Iterator* it) {
-			if (&tmp == &(it->tmp))return false;
+			if (id == it->id)return false;
 			else return true;
 		}
-
 
 	};
 
 	class r_Iterator {
 	private:
-		Node* tmp;
-	
+		Binary_tree* tmp = NULL;
+		Node** arr = NULL;
+		int id;
+		void refresh(Node* qwe, int &i) {
+			if (qwe == NULL) return;
+			arr[i++] = qwe;
+			refresh(qwe->left, i);
+			refresh(qwe->right, i);
+		}
 	public:
+		r_Iterator(Binary_tree* qwe){
+			int new_i = 0;
+			tmp = qwe;
+			arr = new Node*[tmp->getSize()];
+			refresh(tmp->root, new_i);
+			id = tmp->size - 1;
+			tmp->is_update = false;
+		}
 
+		r_Iterator(Binary_tree* qwe, int i) {
+			int new_i = 0;
+			tmp = qwe;
+			arr = new Node*[tmp->getSize()];
+			refresh(tmp->root, new_i);
+			id = i;
+			tmp->is_update = false;
+		}
 
+		Data& operator *() {
+			if (id >= 0 && id < tmp->getSize())
+				return arr[id]->data;
+			else throw "Exeption";
+		}
+
+		r_Iterator* operator ++() {
+			if (id < 0) throw "Exeption";
+			if (tmp->is_update) {
+				int new_i = 0;
+				delete[] arr;
+				arr = new Node*[tmp->getSize()];
+				refresh(tmp->root, new_i);
+			}
+			id--;
+		
+			return this;
+		}
+
+		r_Iterator* operator --() {
+			if (id >= tmp->getSize()) throw "Exeption";
+			if (tmp->is_update) {
+				int new_i = 0;
+				delete[] arr;
+				arr = new Node*[tmp->getSize()];
+				refresh(tmp->root, new_i);
+			}
+			id++;
+			return this;
+		}
+
+		bool operator ==(const r_Iterator* it) {
+			if (id == it->id)return true;
+			else return false;
+		}
+
+		bool operator !=(const r_Iterator* it) {
+			if (id == it->id)return false;
+			else return true;
+		}
 
 	};
 
@@ -298,13 +414,22 @@ public:
 
 
 	Iterator* begin() {
-		Iterator* beg = new Iterator();
+		Iterator* beg = new Iterator(this);
+		return beg;
+	}
+	Iterator* end() {
+		Iterator* beg = new Iterator(this, this->size);
+		return beg;
+	}
+	r_Iterator* rbegin() {
+		r_Iterator* beg = new r_Iterator(this);
+		return beg;
+	}
+	r_Iterator* rend() {
+		r_Iterator* beg = new r_Iterator(this, -1);
 		return beg;
 
 	}
-	Iterator end();
-	r_Iterator rbegin();
-	r_Iterator rend();
 
 };
 

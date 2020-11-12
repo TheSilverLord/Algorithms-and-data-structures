@@ -12,7 +12,18 @@ void menu() {
 		<< "8. Вывести дерево" << std::endl
 		<< "9. Очистить дерево" << std::endl
 		<< "10. Подсчет элементов, которые больше заданного числа" << std::endl
-		<< "10. ИТЕРАТОРЫ" << std::endl;
+		<< "11. Итератор: Операция *\n" 
+		<< "12. Итератор: Операция ++\n"
+		<< "13. Итератор: Операция --\n" 
+		<< "14. Риверс Итератор: Операция *\n" 
+		<< "15. Риверс Итератор: Операция ++\n" 
+		<< "16. Риверс Итератор: Операция --\n"
+		<< "17. Проверка итератора на конец\n" 
+		<< "18. Проверка реверсного итератора на конец\n" 
+		<< "19. Установка итератора на начало\n"
+		<< "20. Установка реверсного итератора на начало\n" 
+		<< "21. Запись с помощью итератора\n" 
+		<< "22. Запись с помощью реверсного итератора\n";
 
 }
 
@@ -20,6 +31,8 @@ void menu() {
 int main() {
 	setlocale(LC_ALL, "ru");
 	Binary_tree<int, int> tree;
+	Binary_tree<int, int>::Iterator* it = NULL;
+	Binary_tree<int, int>::r_Iterator* it1 = NULL;
 	bool k = true;
 	while (k) {
 		menu();
@@ -59,7 +72,6 @@ int main() {
 				std::cout << x[i] << " ";
 			}
 			std::cout << std::endl;
-
 			break; }
 		case 8: {
 			tree.show();
@@ -72,14 +84,177 @@ int main() {
 			std::cin >> val;
 			std::cout << tree.count(val);
 			break; }
-		default:
-			k = false;
+		case 11: {
+			if (it == NULL){
+				std::cout << "Error" << std::endl;
+				break;
+			}
+			try{
+				std::cout << *(*it) << std::endl;
+			}
+			catch (...){
+				std::cout << "Exception" << std::endl;
+			}
 			break;
+		}
+		case 12: {
+			if (it == NULL)
+			{
+				std::cout << "Error" << std::endl;
+				break;
+			}
+			try
+			{
+				++(*it);
+			}
+			catch (...)
+			{
+				std::cout << "Exception" << std::endl;
+			}
+			break; }
+		case 13: {
+			if (it == NULL)
+			{
+				std::cout << "Error" << std::endl;
+				break;
+			}
+			try
+			{
+				--(*it);
+			}
+			catch (...)
+			{
+				std::cout << "Exception" << std::endl;
+			}
+			break; }
+		case 14: {
+			if (it1 == NULL)
+			{
+				std::cout << "Error" << std::endl;
+				break;
+			}
+			try
+			{
+				std::cout << **it1 << std::endl;
+			}
+			catch (...)
+			{
+				std::cout << "Exception" << std::endl;
+			}
+			break; }
+		case 15: {
+			if (it1 == NULL)
+			{
+				std::cout << "Error" << std::endl;
+				break;
+			}
+			try
+			{
+				++(*it1);
+			}
+			catch (...)
+			{
+				std::cout << "Exception" << std::endl;
+			}
+			break; }
+		case 16: {
+			if (it1 == NULL)
+			{
+				std::cout << "Error" << std::endl;
+				break;
+			}
+			try
+			{
+				--(*it1);
+			}
+			catch (...)
+			{
+				std::cout << "Exception" << std::endl;
+			}
+			break;
+		}
+		case 17:
+		{
+			if (it == NULL)
+			{
+				std::cout << "Error" << std::endl;
+				break;
+			}
+			if (*it != tree.end()) std::cout << 0 << std::endl;
+			else {
+				std::cout << 1 << std::endl;
+			}
+			break;
+		}
+		case 18:
+		{
+			if (it1 == NULL)
+			{
+				std::cout << "Error" << std::endl;
+				break;
+			}
+			if (*it1 != tree.rend()) std::cout << 0 << std::endl;
+			else {
+				std::cout << 1 << std::endl;
+			}
+			break;
+		}
+		case 19:
+		{
+			if (it == NULL) it = new Binary_tree<int, int >::Iterator(&tree);
+			it = tree.begin();
+			break;
+		}
+		case 20:
+		{
+			if (it1 == NULL) it1 = new Binary_tree<int, int >::r_Iterator(&tree);
+			it1 = tree.rbegin();
+			break;
+		}
+		case 21:
+		{
+			int val;
+			std::cin >> val;
+			if (it == NULL)
+			{
+				std::cout << "Error" << std::endl;
+				break;
+			}
+			try
+			{
+				**it = val;
+			}
+			catch (...)
+			{
+				std::cout << "Exception" << std::endl;
+			}
+			break;
+		}
+		case 22:
+		{
+			int val;
+			std::cin >> val;
+			if (it1 == NULL)
+			{
+				std::cout << "Error" << std::endl;
+				break;
+			}
+			try
+			{
+				**it1 = val;
+			}
+			catch (...)
+			{
+				std::cout << "Exception" << std::endl;
+			}
+			break;
+		}
+		default: {
+			k = false;
+			break; }
 		}
 
 	}
 
-
-	system("Pause");
 	return 0;
 }
