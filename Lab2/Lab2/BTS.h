@@ -191,8 +191,8 @@ private:
 	void copy_tree(Node* rt, Binary_tree& bt) {
 		if (rt == NULL) return;
 		bt.insert(rt->key, rt->data);
-		copy_tree(rt->left, N, val);
-		copy_tree(rt->right, N, val);
+		copy_tree(rt->left, bt);
+		copy_tree(rt->right, bt);
 	}
 
 public:
