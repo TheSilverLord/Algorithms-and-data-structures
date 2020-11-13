@@ -188,6 +188,13 @@ private:
 		size_tree(rt->right, N, val);
 	}
 
+	void copy_tree(Node* rt, Binary_tree& bt) {
+		if (rt == NULL) return;
+		bt.insert(rt->key, rt->data);
+		copy_tree(rt->left, N, val);
+		copy_tree(rt->right, N, val);
+	}
+
 public:
 	bool is_update = false;
 
@@ -198,7 +205,10 @@ public:
 		size = 0;
 	}
 
-	Binary_tree(const Binary_tree& bt);
+	Binary_tree(const Binary_tree& bt)
+	{
+		copy_tree(root, bt);
+	}
 
 	~Binary_tree() {
 		do_clear(root);
