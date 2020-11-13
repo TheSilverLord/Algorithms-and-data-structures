@@ -54,7 +54,14 @@ int main() {
 		case 4: {
 			int  key;
 			std::cin >> key;
-			std::cout << tree.get(key) << std::endl;
+			try
+			{
+				std::cout << tree.get(key) << std::endl;
+			}
+			catch (...)
+			{
+				std::cout << "Exception" << std::endl;
+			}
 			break; }
 		case 5: {
 			int val, key;

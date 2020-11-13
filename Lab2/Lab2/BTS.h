@@ -65,7 +65,7 @@ private:
 				copy = copy->right;
 		}
 		if (copy == NULL) {
-			//Эксепшон
+			throw "Exception";
 		}
 		return copy->data;
 
@@ -117,7 +117,6 @@ private:
 				return true;
 			}
 	
-		//Далее непонятно
 		Node* x;
 		if (tmp->left == NULL && tmp->right == NULL)
 			x = NULL;
@@ -141,7 +140,6 @@ private:
 					x = tmp->right;
 					tmp = y;
 				} 
-		//Непонятно закончилось
 		
 		if (pred == NULL) root = x;
 		else {
@@ -210,8 +208,6 @@ public:
 		return size;
 	}
 
-	Node* getRoot() { return root; }
-
 	Data* keys() {
 		Data* keys = new Data[size];
 		int id = 0;
@@ -227,7 +223,6 @@ public:
 		Node* tmp = root;
 		while (tmp!=NULL && tmp->key < key) 
 			tmp = tmp->right;
-		//Не доделано, или доделано. Не тестил
 		int N = 0;
 		size_tree(tmp, N, key);
 		return N;
@@ -273,7 +268,6 @@ public:
 			refresh(qwe->right, i);
 		}
 	public:
-		//Сделать работающее удаление из корня
 		Iterator(Binary_tree* qwe) {
 			int new_i = 0;
 			tmp = qwe;
@@ -293,6 +287,13 @@ public:
 
 		
 		Data& operator *() {
+			if (tmp->is_update) {
+				int new_i = 0;
+				delete[] arr;
+				arr = new Node * [tmp->getSize()];
+				refresh(tmp->root, new_i);
+				tmp->is_update = false;
+			}
 			if (id >=0 && id < tmp->getSize())
 				return arr[id]->data;
 			else throw "Exeption";
@@ -367,6 +368,13 @@ public:
 		}
 
 		Data& operator *() {
+			if (tmp->is_update) {
+				int new_i = 0;
+				delete[] arr;
+				arr = new Node * [tmp->getSize()];
+				refresh(tmp->root, new_i);
+				tmp->is_update = false;
+			}
 			if (id >= 0 && id < tmp->getSize())
 				return arr[id]->data;
 			else throw "Exeption";
