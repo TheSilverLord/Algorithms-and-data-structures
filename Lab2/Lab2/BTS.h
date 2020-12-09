@@ -93,7 +93,7 @@ private:
 	}
 
 
-	bool Iterative_Delete(Node* root, Key key)
+	bool Iterative_Delete(Node* rt, Key key)
 	{
 		Node* curr = root;
 		Node* prev = NULL;
@@ -119,8 +119,12 @@ private:
 			else
 				newCurr = curr->left;
 
-			if (prev == NULL)
+			if (prev == NULL) {
+				if (curr->left == NULL && curr->right != NULL) root = curr->right;
+				if (curr->right == NULL && curr->left != NULL) root = curr->left;
+				delete curr;
 				return true;
+			}
 
 			if (curr == prev->left)
 				prev->left = newCurr;
