@@ -93,71 +93,63 @@ private:
 	}
 
 
-	bool Iterative_Delete(Node* rt, Key key) {
-		seenValCount = 0;
-		Node* tmp = rt;
-		Node* pred = NULL;
-	
-		while (tmp != NULL ) {
-			if (tmp->key == key) break;
-			pred = tmp;
-	
-			if (key < tmp->key) tmp = tmp->left;
-			else tmp = tmp->right;
-			seenValCount++;
-		}
-		if (tmp == NULL) return false;
+	bool Iterative_Delete(Node* root, Key key)
+	{
+		Node* curr = root;
+		Node* prev = NULL;
 
-		if (tmp->left != NULL && tmp->right != NULL)
-			if (rt == tmp) {
-				Node* y = tmp->right;
-				while (y->left != NULL) {
-					y = y->left;
-					seenValCount++;
-				}
-				y->left = tmp->left;
-
-				root = root->right;
-
-				size--;
-				delete tmp;
-				return true;
-			}
-	
-		Node* x;
-		if (tmp->left == NULL && tmp->right == NULL)
-			x = NULL;
-		else
-			if (tmp->left == NULL)
-				x = tmp->right;
+		while (curr != NULL && curr->key != key) {
+			prev = curr;
+			if (key < curr->key)
+				curr = curr->left;
 			else
-				if (tmp->right == NULL)
-					x = tmp->left;
-				else {
-					pred = tmp;
-					Node* y = tmp->right;
-	
-					while (y->left != NULL) {
-						pred = y;
-						y = y->left;
-						seenValCount++;
-					}
-	
-					tmp->key = y->key;
-					tmp->data = y->data;
-					x = tmp->right;
-					tmp = y;
-				} 
-		
-		if (pred == NULL) root = x;
-		else {
-			if (tmp->key < pred->key)
-				pred->left = x;
-			else 
-				pred->right = x;
+				curr = curr->right;
 		}
+
+		if (curr == NULL) {
+			return false;
+		}
+
+		if (curr->left == NULL || curr->right == NULL) {
+
+			Node* newCurr;
+
+			if (curr->left == NULL)
+				newCurr = curr->right;
+			else
+				newCurr = curr->left;
+
+			if (prev == NULL)
+				return true;
+
+			if (curr == prev->left)
+				prev->left = newCurr;
+			else
+				prev->right = newCurr;
+
+			delete curr;
+		}
+		else {
+			Node* p = NULL;
+			Node* temp;
+
+			temp = curr->right;
+			while (temp->left != NULL) {
+				p = temp;
+				temp = temp->left;
+			}
+
+			if (p != NULL)
+				p->left = temp->right;
+			else
+				curr->right = temp->right;
+
+			curr->data = temp->data;
+			curr->key = temp->key;
+			delete temp;
+		}
+
 		size--;
-		delete tmp;
 		return true;
 	}
 
