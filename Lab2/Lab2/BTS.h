@@ -25,6 +25,7 @@ private:
 	int size;
 
 	bool doInsert(Node* rt, Key k, Data data) {
+		seenValCount = 0;
 		
 		if (rt == NULL) {
 			rt = new Node(k, data);
@@ -44,6 +45,7 @@ private:
 				copy = copy->left;
 			else
 				copy = copy->right;
+			seenValCount++;
 		}
 
 		if (k < pred->key)
@@ -57,12 +59,14 @@ private:
 
 
 	Data Iterative_search(Node* rt, Key k) {
+		seenValCount = 0;
 		Node* copy = rt;
 		while (copy != NULL && k != copy->key) {
 			if (k < copy->key)
 				copy = copy->left;
 			else 
 				copy = copy->right;
+			seenValCount++;
 		}
 		if (copy == NULL) {
 			throw "Exception";
@@ -90,6 +94,7 @@ private:
 
 
 	bool Iterative_Delete(Node* rt, Key key) {
+		seenValCount = 0;
 		Node* tmp = rt;
 		Node* pred = NULL;
 	
@@ -99,6 +104,7 @@ private:
 	
 			if (key < tmp->key) tmp = tmp->left;
 			else tmp = tmp->right;
+			seenValCount++;
 		}
 		if (tmp == NULL) return false;
 
@@ -107,6 +113,7 @@ private:
 				Node* y = tmp->right;
 				while (y->left != NULL) {
 					y = y->left;
+					seenValCount++;
 				}
 				y->left = tmp->left;
 
@@ -133,6 +140,7 @@ private:
 					while (y->left != NULL) {
 						pred = y;
 						y = y->left;
+						seenValCount++;
 					}
 	
 					tmp->key = y->key;
@@ -195,6 +203,8 @@ private:
 		copy_tree(rt->right, bt);
 	}
 
+	int seenValCount;
+
 public:
 	bool is_update = false;
 
@@ -203,6 +213,7 @@ public:
 	Binary_tree() {
 		root = NULL;
 		size = 0;
+		seenValCount = 0;
 	}
 
 	Binary_tree(const Binary_tree& bt)
@@ -229,7 +240,7 @@ public:
 		do_clear(root);
 	}
 
-	int count(Data key) {
+	int count(Key key) {
 		Node* tmp = root;
 		while (tmp!=NULL && tmp->key < key) 
 			tmp = tmp->right;
@@ -263,6 +274,11 @@ public:
 	void show() {
 		Node* copy = root;
 		do_Show(copy, 0);
+	}
+
+	int getSeenValCount()
+	{
+		return seenValCount;
 	}
 
 
