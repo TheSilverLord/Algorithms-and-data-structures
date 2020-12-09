@@ -13,6 +13,12 @@ private:
 		Key key;
 		Node* left;
 		Node* right;
+		Node() {
+			this->data = 0;
+			this->key = 0;
+			this->left = NULL;
+			this->right = NULL;
+		}
 		Node(Key key, Data data) {
 			this->data = data;
 			this->key = key;

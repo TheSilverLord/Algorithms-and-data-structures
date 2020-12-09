@@ -256,6 +256,14 @@ int main() {
 			}
 			break;
 		}
+		case 23:
+		{
+			for (int i = 0; i < 27; i++)
+			{
+				tree.insert(i, 1);
+			}
+			break;
+		}
 		default: {
 			k = false;
 			break; }
