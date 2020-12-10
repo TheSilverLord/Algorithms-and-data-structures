@@ -26,8 +26,11 @@ private:
 
 	Node* root;
 	int size;
+	int seenValCount;
 
 	bool doInsert(Node* rt, Key k, Data data) {
+		seenValCount = 0;
+
 		if (rt == NULL) {
 			rt = new Node(k, data);
 			root = rt;
@@ -63,7 +66,7 @@ private:
 
 			if(copy!=root)
 			if (RAND_MAX / (copy->n + 1) > rand()) {
-				std::cout << "rand" << std::endl;
+				//std::cout << "rand" << std::endl;
 				Node* new_root = new Node(k, data);
 
 				new_root->n = copy->n+1;
@@ -92,6 +95,7 @@ private:
 				copy = copy->left;
 			else {
 				copy = copy->right;
+				seenValCount++;
 			}
 
 		}
@@ -106,12 +110,14 @@ private:
 	}
 
 	Data Iterative_search(Node* rt, Key k) {
+		seenValCount = 0;
 		Node* copy = rt;
 		while (copy != NULL && k != copy->key) {
 			if (k < copy->key)
 				copy = copy->left;
 			else
 				copy = copy->right;
+			seenValCount++;
 		}
 		if (copy == NULL) {
 			throw "Exception";
@@ -139,18 +145,21 @@ private:
 
 	bool Iterative_Delete(Node* rt, Key key)
 	{
+		seenValCount = 0;
 		Node* curr = root;
 		Node* pred = root;
 		while (curr != NULL) {
 			if (curr->key > key) {
 				pred = curr;
 				curr = curr->left;
+				seenValCount++;
 				continue;
 			}
 			else {
 				if (curr->key < key) {
 					pred = curr;
 					curr = curr->right;
+					seenValCount++;
 					continue;
 				}
 			}
@@ -210,8 +219,8 @@ private:
 	Node* Join(Node* a, Node* b) {
 		if (a == NULL) return b;
 		if (b == NULL) return a;
-		std::cout << "delRand" << std::endl;
-		if (rand() / (RAND_MAX / a->n + b->n + 1) < a->n) {
+		//std::cout << "delRand" << std::endl;
+		if (rand() / (RAND_MAX / (a->n + b->n + 1)) < a->n) {
 			a->right = Join(a->right, b);
 			return a;
 		}
@@ -273,6 +282,7 @@ public:
 	Random_tree() {
 		root = NULL;
 		size = 0;
+		seenValCount = 0;
 	}
 
 	Random_tree(const Random_tree& bt)
@@ -332,6 +342,10 @@ public:
 		do_Show(copy, 0);
 	}
 
+	int getSeenValCount()
+	{
+		return seenValCount;
+	}
 
 	class Iterator {
 	private:

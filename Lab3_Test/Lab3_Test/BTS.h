@@ -1,13 +1,11 @@
-#pragma once
 #include <iostream>
-#include <random>
 //Алгоритмы операций поиска, вставки и удаления реализуются в итерационной форме.
 //Вывод на экран последовательности ключей при обходе  узлов дерева  по схеме t -> Lt -> Rt.
 //Дополнительная операция : определение в дереве количества узлов с ключами, большими заданного значения.Трудоёмкость операции– O(log n).
-//8 вариант
+//4 вариант
 
 template<class Key, class Data>
-class Random_tree {
+class Binary_tree {
 private:
 	class Node {
 	public:
@@ -15,7 +13,12 @@ private:
 		Key key;
 		Node* left;
 		Node* right;
-		int n = 0;
+		Node() {
+			this->data = 0;
+			this->key = 0;
+			this->left = NULL;
+			this->right = NULL;
+		}
 		Node(Key key, Data data) {
 			this->data = data;
 			this->key = key;
@@ -28,6 +31,8 @@ private:
 	int size;
 
 	bool doInsert(Node* rt, Key k, Data data) {
+		seenValCount = 0;
+		
 		if (rt == NULL) {
 			rt = new Node(k, data);
 			root = rt;
@@ -37,81 +42,37 @@ private:
 
 		Node* copy = root;
 		Node* pred = NULL;
-
-		Key* keys = new Key[size];
-		int id = 0;
-		do_keys(root,keys,id);
-		for (int i = 0; i < size; i++) {
-			if (keys[i] == k) return false;
-		}
-
-		if (RAND_MAX / (copy->n + 1) > rand()) {
-			Node* new_root = new Node(k, data);
-			if (copy->key > new_root->key) {
-				new_root->right = copy;
-			}
-			else {
-				new_root->left = copy;
-			}
-			root = new_root;
-			size++;
-			calcN(root);
-			return true;
-		}
-
 		while (copy != NULL) {
-
-			if(copy!=root)
-			if (RAND_MAX / (copy->n + 1) > rand()) {
-				std::cout << "rand" << std::endl;
-				Node* new_root = new Node(k, data);
-
-				new_root->n = copy->n+1;
-				if (copy->key > new_root->key) {
-					new_root->right = copy;
-				}
-				else {
-					new_root->left = copy;
-				}
-
-				if (pred->key > new_root->key) {
-					pred->left = new_root;
-
-				}
-				else {
-					pred->right = new_root;
-				}
-				size++;
-				calcN(root);
-				return true;
-			}
-
 			pred = copy;
+			if (k == copy->key)
+				return false;
 
 			if (k < copy->key)
 				copy = copy->left;
-			else {
+			else
 				copy = copy->right;
-			}
-
+			seenValCount++;
 		}
 
 		if (k < pred->key)
 			pred->left = new Node(k, data);
 		else
 			pred->right = new Node(k, data);
+
 		size++;
-		calcN(root);
 		return true;
 	}
 
+
 	Data Iterative_search(Node* rt, Key k) {
+		seenValCount = 0;
 		Node* copy = rt;
 		while (copy != NULL && k != copy->key) {
 			if (k < copy->key)
 				copy = copy->left;
-			else
+			else 
 				copy = copy->right;
+			seenValCount++;
 		}
 		if (copy == NULL) {
 			throw "Exception";
@@ -120,12 +81,12 @@ private:
 
 	}
 
-	bool search (Node* rt, Key k, Data val) {
+	bool Iterative_change(Node* rt, Key k, Data val) {
 		Node* copy = rt;
 		while (copy != NULL && k != copy->key) {
 			if (k < copy->key)
 				copy = copy->left;
-			else
+			else 
 				copy = copy->right;
 		}
 		if (copy == NULL) {
@@ -137,108 +98,84 @@ private:
 
 	}
 
-	bool Iterative_Delete(Node* rt, Key key)
+	bool Iterative_Delete(Node* root, Key key)
 	{
+		seenValCount = 0;
 		Node* curr = root;
-		Node* pred = root;
-		while (curr != NULL) {
-			if (curr->key > key) {
-				pred = curr;
+		Node* prev = NULL;
+
+		while (curr != NULL && curr->key != key) {
+			prev = curr;
+			if (key < curr->key)
 				curr = curr->left;
-				continue;
-			}
-			else {
-				if (curr->key < key) {
-					pred = curr;
-					curr = curr->right;
-					continue;
-				}
-			}
+			else
+				curr = curr->right;
+			seenValCount++;
+		}
 
-			if (curr == root) {
-				curr = Join(curr->left, curr->right);
-				root = curr;
+		if (curr == NULL) {
+			return false;
+		}
 
-			}
-			else {
-				if (pred->key > key) {
-					curr = Join(curr->left, curr->right);
-					pred->left = curr;
-				}
-				else {
-					curr = Join(curr->left, curr->right);
-					pred->right = curr;
-				}
+		if (curr->left == NULL || curr->right == NULL) {
 
-			}
-				calcN(root);
-				size--;
+			Node* newCurr;
+
+			if (curr->left == NULL)
+				newCurr = curr->right;
+			else
+				newCurr = curr->left;
+
+			if (prev == NULL)
 				return true;
 
-		}
-		return false;
+			if (curr == prev->left)
+				prev->left = newCurr;
+			else
+				prev->right = newCurr;
 
-	}
-
-	int NodeCount(Node* node)
-	{
-		if (node->left == NULL && node->right == NULL)
-			return 1;
-		int left_count, right_count;
-		if (node->left != NULL)
-			left_count = NodeCount(node->left);
-		else
-			left_count = 0;
-		if (node->right != NULL)
-			right_count = NodeCount(node->right);
-		else
-			right_count = 0;
-
-		return left_count + right_count+1;
-	}
-
-	void calcN(Node* rt) {
-		if (rt == NULL) return;
-		rt->n= NodeCount(rt) -1;
-		calcN(rt->left);
-		calcN(rt->right);
-	}
-
-
-
-
-	Node* Join(Node* a, Node* b) {
-		if (a == NULL) return b;
-		if (b == NULL) return a;
-		std::cout << "delRand" << std::endl;
-		if (rand() / (RAND_MAX / a->n + b->n + 1) < a->n) {
-			a->right = Join(a->right, b);
-			return a;
+			delete curr;
 		}
 		else {
-			b->left = Join(a, b->left);
-			return b;
+			Node* p = NULL;
+			Node* temp;
+
+			temp = curr->right;
+			while (temp->left != NULL) {
+				p = temp;
+				temp = temp->left;
+			}
+
+			if (p != NULL)
+				p->left = temp->right;
+			else
+				curr->right = temp->right;
+
+			curr->data = temp->data;
+			curr->key = temp->key;
+			delete temp;
 		}
 
+		size--;
+		return true;
 	}
 
-
-	void do_Show(Node* rt, int l) {
-		if (rt != NULL) {
+	void do_Show(Node* rt, int l)	{
+		if (rt != NULL){
 			do_Show(rt->right, l + 1);
-			for (int i = 1; i <= 3 * l; i++)
+			for (int i = 1; i <= 3*l; i++)
 				std::cout << " ";
 
-			std::cout << rt->key << "(" << rt->data << ")" << rt->n << std::endl;
+			std::cout << rt->key << "(" << rt->data << ")"  << std::endl;
 			do_Show(rt->left, l + 1);
 		}
 	}
 
-	void do_keys(Node* rt, Key* keys, int& id) {
+	void do_keys(Node* rt, Data* keys, int& id) {
 		if (rt == NULL) return;
-		keys[id++] = rt->key;
-		do_keys(rt->left, keys, id);
-		do_keys(rt->right, keys, id);
+		keys[id++]=rt->key;
+		do_keys(rt->left,keys,id);
+		do_keys(rt->right,keys, id);
 	}
 
 	void do_clear(Node* rt) {
@@ -251,40 +188,43 @@ private:
 		root = NULL;
 	}
 
-	void size_tree(Node* rt, int& N, Key& val) {
+	void size_tree(Node* rt, int &N, Key &val) {
 		if (rt == NULL) return;
-		if (rt->key > val) N++;
+		if(rt->key > val) N++;
 		size_tree(rt->left, N, val);
 		size_tree(rt->right, N, val);
 	}
 
-	void copy_tree(Node* rt, Random_tree& bt) {
+	void copy_tree(Node* rt, Binary_tree& bt) {
 		if (rt == NULL) return;
 		bt.insert(rt->key, rt->data);
 		copy_tree(rt->left, bt);
 		copy_tree(rt->right, bt);
 	}
 
+	int seenValCount;
+
 public:
 	bool is_update = false;
 
 	friend Node;
 
-	Random_tree() {
+	Binary_tree() {
 		root = NULL;
 		size = 0;
+		seenValCount = 0;
 	}
 
-	Random_tree(const Random_tree& bt)
+	Binary_tree(const Binary_tree& bt)
 	{
 		copy_tree(root, bt);
 	}
 
-	~Random_tree() {
+	~Binary_tree() {
 		do_clear(root);
 	}
 
-	int getSize() {
+	int getSize() { 
 		return size;
 	}
 
@@ -299,9 +239,9 @@ public:
 		do_clear(root);
 	}
 
-	int count(Data key) {
+	int count(Key key) {
 		Node* tmp = root;
-		while (tmp != NULL && tmp->key < key)
+		while (tmp!=NULL && tmp->key < key) 
 			tmp = tmp->right;
 		int N = 0;
 		size_tree(tmp, N, key);
@@ -321,6 +261,9 @@ public:
 	Data get(Key key) {
 		return Iterative_search(root, key);
 	}
+	bool change(Key key, Data val) {
+		return Iterative_change(root, key, val);
+	}
 
 	bool remove(Key key) {
 		is_update = true;
@@ -332,10 +275,15 @@ public:
 		do_Show(copy, 0);
 	}
 
+	int getSeenValCount()
+	{
+		return seenValCount;
+	}
+
 
 	class Iterator {
 	private:
-		Random_tree* tmp;
+		Binary_tree* tmp;
 		Node** arr;
 		int id = 0;
 		void refresh(Node* qwe, int& i) {
@@ -345,24 +293,24 @@ public:
 			refresh(qwe->right, i);
 		}
 	public:
-		Iterator(Random_tree* qwe) {
+		Iterator(Binary_tree* qwe) {
 			int new_i = 0;
 			tmp = qwe;
-			arr = new Node * [tmp->getSize()];
+			arr = new Node*[tmp->getSize()];
 			refresh(tmp->root, new_i);
 			tmp->is_update = false;
 
 		}
-		Iterator(Random_tree* qwe, int i) {
+		Iterator(Binary_tree* qwe, int i) {
 			int new_i = 0;
 			tmp = qwe;
-			arr = new Node * [tmp->getSize()];
+			arr = new Node*[tmp->getSize()];
 			refresh(tmp->root, new_i);
 			tmp->is_update = false;
 			id = i;
 		}
 
-
+		
 		Data& operator *() {
 			if (tmp->is_update) {
 				int new_i = 0;
@@ -371,7 +319,7 @@ public:
 				refresh(tmp->root, new_i);
 				tmp->is_update = false;
 			}
-			if (id >= 0 && id < tmp->getSize())
+			if (id >=0 && id < tmp->getSize())
 				return arr[id]->data;
 			else throw "Exeption";
 		}
@@ -381,7 +329,7 @@ public:
 			if (tmp->is_update) {
 				int new_i = 0;
 				delete[] arr;
-				arr = new Node * [tmp->getSize()];
+				arr = new Node*[tmp->getSize()];
 				refresh(tmp->root, new_i);
 				tmp->is_update = false;
 			}
@@ -394,7 +342,7 @@ public:
 			if (tmp->is_update) {
 				int new_i = 0;
 				delete[] arr;
-				arr = new Node * [tmp->getSize()];
+				arr = new Node*[tmp->getSize()];
 				refresh(tmp->root, new_i);
 				tmp->is_update = false;
 			}
@@ -416,29 +364,29 @@ public:
 
 	class r_Iterator {
 	private:
-		Random_tree* tmp = NULL;
+		Binary_tree* tmp = NULL;
 		Node** arr = NULL;
 		int id;
-		void refresh(Node* qwe, int& i) {
+		void refresh(Node* qwe, int &i) {
 			if (qwe == NULL) return;
 			arr[i++] = qwe;
 			refresh(qwe->left, i);
 			refresh(qwe->right, i);
 		}
 	public:
-		r_Iterator(Random_tree* qwe) {
+		r_Iterator(Binary_tree* qwe){
 			int new_i = 0;
 			tmp = qwe;
-			arr = new Node * [tmp->getSize()];
+			arr = new Node*[tmp->getSize()];
 			refresh(tmp->root, new_i);
 			id = tmp->size - 1;
 			tmp->is_update = false;
 		}
 
-		r_Iterator(Random_tree* qwe, int i) {
+		r_Iterator(Binary_tree* qwe, int i) {
 			int new_i = 0;
 			tmp = qwe;
-			arr = new Node * [tmp->getSize()];
+			arr = new Node*[tmp->getSize()];
 			refresh(tmp->root, new_i);
 			id = i;
 			tmp->is_update = false;
@@ -462,11 +410,11 @@ public:
 			if (tmp->is_update) {
 				int new_i = 0;
 				delete[] arr;
-				arr = new Node * [tmp->getSize()];
+				arr = new Node*[tmp->getSize()];
 				refresh(tmp->root, new_i);
 			}
 			id--;
-
+		
 			return this;
 		}
 
@@ -475,7 +423,7 @@ public:
 			if (tmp->is_update) {
 				int new_i = 0;
 				delete[] arr;
-				arr = new Node * [tmp->getSize()];
+				arr = new Node*[tmp->getSize()];
 				refresh(tmp->root, new_i);
 			}
 			id++;
