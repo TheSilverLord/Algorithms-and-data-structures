@@ -23,7 +23,7 @@ public:
 	Node* it_node = NULL;
 	Node** arr;
 
-	void resize() {
+	/*void resize() {
 		int past_size = max_size;
 		max_size *= 2;
 		size = 0;
@@ -40,7 +40,31 @@ public:
 
 		for (int i = 0; i < max_size; i++)
 			if (arr2[i])
-				delete[] arr2[i];
+				delete arr2[i];
+		delete[] arr2;
+	}*/
+	void resize()
+	{
+		int past_buffer_size = max_size;
+		max_size *= 2;
+		size = 0;
+		Node** arr2 = new Node * [max_size];
+		for (int i = 0; i < max_size; ++i)
+			arr2[i] = nullptr;
+		std::swap(arr, arr2);
+		for (int i = 0; i < past_buffer_size; ++i)
+		{
+			if (arr2[i] && arr2[i]->state)
+				while (arr2[i])
+				{
+					add(arr2[i]->key, arr2[i]->value); // добавляем элементы в новый массив
+					arr2[i] = arr2[i]->next;
+				}
+		}
+		// удаление предыдущего массива
+		for (int i = 0; i < past_buffer_size; ++i)
+			if (arr2[i])
+				delete arr2[i];
 		delete[] arr2;
 	}
 
@@ -126,11 +150,16 @@ public:
 			if (find->key == k) {
 				if (pred) {
 					pred->next = find->next;
-					pred->next = NULL;
 					delete find;
 				}
 				else {
-					arr[i] = NULL;
+					if (find->next)
+					{
+						Node* next = find->next;
+						delete find;
+						arr[i] = next;
+					}
+					else arr[i] = NULL;
 				}
 				return true;
 			}
@@ -168,11 +197,14 @@ public:
 
 		for (int i = 0; i < max_size; i++)
 			while (arr[i]) {
+				Node* pred = arr[i]->next;
 				delete arr[i];
-				arr[i] = arr[i]->next;
+				arr[i] = pred;
 			}
 		delete[] arr;
-		arr = NULL;
+		arr = new Node * [max_size];
+		for (int i = 0; i < max_size; ++i)
+			arr[i] = nullptr;
 	}
 
 	bool is_empty() {

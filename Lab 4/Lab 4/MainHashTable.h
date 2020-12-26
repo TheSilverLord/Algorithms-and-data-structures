@@ -150,14 +150,14 @@ public:
 
 		Data& operator*() {
 			if (mht->is_chain) {
-				if (id < 0) throw "Exeption";
+				if (chain_id >= mht->chain.max_size || chain_id < 0) throw "Exeption";
 
 				if (!mht->chain.it_node) throw 1;
 
 				return mht->chain.it_node->value;
 			}
 			else {
-				if (id > mht->open.max_size || id < 0) throw "Exeption";
+				if (id >= mht->open.max_size || id < 0) throw "Exeption";
 				if (!mht->open.it_node) throw 1;
 				return mht->open.it_node->value;
 			}

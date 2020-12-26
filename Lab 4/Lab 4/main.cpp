@@ -60,7 +60,13 @@ int main() {
 		case 6: {
 			std::string k;
 			std::cin >> k;
-			std::cout << HT.find(k) << std::endl;
+			try
+			{
+				std::cout << HT.find(k) << std::endl;
+			}
+			catch (...) {
+				std::cout << "Exception" << std::endl;
+			}
 			break;
 		}
 		case 7: {
