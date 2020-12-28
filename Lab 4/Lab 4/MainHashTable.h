@@ -230,5 +230,10 @@ public:
 		}
 	}
 
+	int getN(int i) {
+		if (is_chain) {
+			return chain.getN(i);
+		}
+	}
 
 };

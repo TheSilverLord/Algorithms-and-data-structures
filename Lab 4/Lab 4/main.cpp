@@ -1,6 +1,7 @@
 #include <iostream>
 #include "MainHashTable.h"
 #include <locale>
+#include <math.h>
 void menu() {
 
 	std::cout << "1. Добавить элемент по ключу" << std::endl <<
@@ -18,11 +19,13 @@ void menu() {
 		<< "13. Итератор: Операция ++\n"
 		<< "14. Проверка итератора на конец\n"
 		<< "15. Установка итератора на начало\n"
-		<< "16. Запись с помощью итератора\n";
+		<< "16. Запись с помощью итератора\n"
+		<< "17. хи*хи\n";
 }
 
 
 int main() {
+	int count = 0;
 	setlocale(LC_ALL, "rus");
 	MainHashTable<std::string, int> HT;
 	MainHashTable<std::string, int>::Iterator* it = NULL;
@@ -39,6 +42,7 @@ int main() {
 			int data;
 			std::cin >> data;
 			std::cout << HT.insert(k, data) << std::endl;
+			count++;
 			break;
 		}
 		case 2: {
@@ -160,14 +164,20 @@ int main() {
 			}
 			break;
 		}
+		case 17: {
+			double hi = 0;
+			int N = HT.getSize();
+			for (int i = 0; i < N; i++) {
+				hi += pow((HT.getN(i) - count / N), 2);
+			}
+			hi *= N / count;
+			std::cout << "1/sqrt(m)=+-" << 1 / sqrt(HT.getSize()) << "Formula  = " << hi << std::endl;
+			break;
+		}
 		default:
 			break;
 		}
 	}
-
-
-
-
 
 	return 0;
 }

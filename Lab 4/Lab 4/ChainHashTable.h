@@ -9,6 +9,7 @@ public:
 	class Node {
 	public:
 		Key key;
+		int n;
 		Data value;
 		bool state = false;
 		Node* next;
@@ -23,26 +24,6 @@ public:
 	Node* it_node = NULL;
 	Node** arr;
 
-	/*void resize() {
-		int past_size = max_size;
-		max_size *= 2;
-		size = 0;
-
-		Node** arr2 = new Node * [max_size];
-		for (int i = 0; i < max_size; i++)
-			arr[i] = NULL;
-
-		std::swap(arr, arr2);
-
-		for (int i = 0; i < past_size; i++)
-			if (arr2[i] && arr2[i]->state)
-				add(arr2[i]->key, arr2[i]->value);
-
-		for (int i = 0; i < max_size; i++)
-			if (arr2[i])
-				delete arr2[i];
-		delete[] arr2;
-	}*/
 	void resize()
 	{
 		int past_buffer_size = max_size;
@@ -227,6 +208,16 @@ public:
 			}
 		}
 		std::cout << std::endl;
+	}
+
+	int getN(int i) {
+		int count = 0;
+		Node* tmp = arr[i];
+		while (tmp != NULL) {
+			count++;
+			tmp = tmp->next;
+		}
+		return count;
 	}
 
 };
